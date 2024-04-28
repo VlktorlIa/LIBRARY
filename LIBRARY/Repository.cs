@@ -2,11 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace LIBRARY
 {
@@ -15,35 +10,34 @@ namespace LIBRARY
 
         public void Add(T item)
         {
-            string fileName = item.GetType().Name + ".json";
-            string path = Directory.GetCurrentDirectory();
-            string _filePath = GetFilePath(item);
+            string _filePath = GetFilePath(item.GetType());
             if (!File.Exists(_filePath))
             {
                 // Create an empty array and serialize it to create the file
                 var emptyArray = new List<T>();
                 Save(emptyArray, _filePath);
             }
-            var items = GetAll(_filePath);
+            var items = GetAll(item.GetType());
             items.Add(item);
             Save(items, _filePath);
         }
 
-        public List<T> GetAll(string _filePath)
+        public static List<T> GetAll(Type type)
         {
-            var json = File.ReadAllText(_filePath);
+            string _filePath = GetFilePath(type);
+            string json = File.ReadAllText(_filePath);
             return JsonConvert.DeserializeObject<List<T>>(json);
         }
 
-        public void Save(List<T> items, string _filePath)
+        public static void Save(List<T> items, string _filePath)
         {
             var json = JsonConvert.SerializeObject(items, Newtonsoft.Json.Formatting.Indented);
             File.WriteAllText(_filePath, json);
         }
 
-        public string GetFilePath(T item)
+        public static string GetFilePath(Type type)
         {
-            return Directory.GetCurrentDirectory() + "\\" + item.GetType().Name + ".json";
+            return Directory.GetCurrentDirectory() + "\\" + type.Name + ".json";
         }
 
     }

@@ -19,5 +19,10 @@ namespace LIBRARY.entity
         public string Country { get; set; }
         public string Image { get; set; }
         public string Link { get; set; }*/
+
+        public bool IsMatch(string search)
+        {
+            return Title.Contains(search) || Author.Contains(search);
+        }
     }
  }
