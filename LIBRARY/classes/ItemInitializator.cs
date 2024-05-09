@@ -1,27 +1,23 @@
 ﻿using LIBRARY.entity;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LIBRARY.classes
 {
     internal class ItemInitializator
     {
-        public static Book InitializeBook()
+        public static Object Initialize(Type type)
         {
             Console.Clear();
-            Book book = new Book();
-            foreach (var prop in book.GetType().GetProperties())
+            Object item = Activator.CreateInstance(type);
+            foreach (var prop in item.GetType().GetProperties())
             {
-                Console.WriteLine("Please enter book {0}", prop.Name);
+                Console.WriteLine("Please enter {1} {0}", prop.Name, type.Name);
                 bool success = false;
                 do {
                     try
                     {
                         string value = Console.ReadLine();
-                        prop.SetValue(book, Convert.ChangeType(value, prop.PropertyType));
+                        prop.SetValue(item, Convert.ChangeType(value, prop.PropertyType));
                         success = true;
                     } catch (Exception e)
                     {
@@ -30,7 +26,7 @@ namespace LIBRARY.classes
                 } while (!success);
                 Console.Clear();
             }          
-            return book;
+            return item;
         }
     }
 }

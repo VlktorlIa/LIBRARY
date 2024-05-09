@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using LIBRARY.entity;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -31,7 +32,7 @@ namespace LIBRARY
 
         public static void Save(List<T> items, string _filePath)
         {
-            var json = JsonConvert.SerializeObject(items, Newtonsoft.Json.Formatting.Indented);
+            var json = JsonConvert.SerializeObject(items, Formatting.Indented);
             File.WriteAllText(_filePath, json);
         }
 
@@ -39,6 +40,12 @@ namespace LIBRARY
         {
             return Directory.GetCurrentDirectory() + "\\" + type.Name + ".json";
         }
-
+        
+        public bool isExist(int id)
+        {
+            List<T> list = GetAll(typeof(T));
+            // TODO fix later
+            return true;
+        }
     }
 }
